@@ -1,0 +1,26 @@
+WITH CustomerActivity AS (
+    SELECT
+        CustomerID,
+        COUNT(ActivityID) AS ActivityCount
+    FROM
+        CustomerActivities
+    WHERE
+        -- ActivityDate BETWEEN %(start_date)s AND %(end_date)s
+        ActivityDate BETWEEN ? AND ?
+    GROUP BY
+        CustomerID
+)
+
+SELECT
+    c.CustomerName,
+    ca.ActivityCount
+FROM
+    CustomerActivity ca
+JOIN
+    Customers c ON ca.CustomerID = c.CustomerID
+WHERE
+    --ca.ActivityCount > %(min_activity_count)s
+    ca.ActivityCount > ?
+ORDER BY
+    ca.ActivityCount DESC;
+

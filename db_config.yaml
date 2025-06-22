@@ -1,0 +1,2 @@
+database:
+  dbname: '~/downloads/separate_sql_params_sqlite3/exercises.db'

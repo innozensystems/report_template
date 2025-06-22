@@ -1,0 +1,7 @@
+paths:
+  output_file: 'output/report_template.xlsx'
+
+params:
+  start_date: '2023-01-01'
+  end_date: '2023-12-31'
+  min_activity_count: 1
