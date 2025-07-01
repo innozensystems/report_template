@@ -5,7 +5,7 @@ if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <new_report_name>"
     exit 1
 fi
-
+report_name=${1}
 cp sql/sql_template.yaml "sql/${report_name}.sql"
 cp report_config/report_template.yaml "report_config/${report_name}.yaml"
 
