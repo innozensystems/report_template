@@ -13,17 +13,14 @@ def read_sql_file(filename):
         return file.read()
 
 def execute_sql_file(query, params, db_config):
+
     print(f"query={query} params={params} db_config={db_config}")
-    try:
-        file_name = Path(db_config['dbname']).name
-        conn = sqlite3.connect(db_config['dbname'])
-    except Exception:
-        file_path = Path(__file__)
-        abs_dir = file_path.resolve().parent.parent.parent
-        print(f"-----{abs_dir}")
-        file_path = abs_dir / file_name
-        print(f"-----{file_path}")
-        conn = sqlite3.connect(file_path)
+
+    file_name = Path(db_config['dbname']).name
+    file_path = Path(__file__)
+    abs_dir = file_path.resolve().parent.parent.parent
+    file_path = abs_dir / file_name
+    conn = sqlite3.connect(file_path)
 
     cur = conn.cursor()
 

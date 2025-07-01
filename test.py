@@ -1,52 +1,41 @@
 import sqlite3
 
 # Define your SQL query with named placeholders
+
 query = """
-WITH CustomerOrders AS (
+WITH CustomerActivity AS (
     SELECT
         CustomerID,
-        COUNT(OrderID) AS TotalOrders,
-        SUM(OrderTotal) AS TotalSales
+        COUNT(ActivityID) AS ActivityCount
     FROM
-        Orders
+        CustomerActivities
     WHERE
-        OrderDate BETWEEN %(start_date)s AND %(end_date)s
+        -- ActivityDate BETWEEN %(start_date)s AND %(end_date)s
+        ActivityDate BETWEEN ? AND ?
     GROUP BY
         CustomerID
-),
-HighSpendingCustomers AS (
-    SELECT
-        CustomerID,
-        TotalOrders,
-        TotalSales
-    FROM
-        CustomerOrders
-    WHERE
-        TotalSales > %(high_spending_threshold)s
 )
 
 SELECT
     c.CustomerName,
-    c.CustomerEmail,
-    hsc.TotalOrders,
-    hsc.TotalSales
+    ca.ActivityCount
 FROM
-    HighSpendingCustomers hsc
+    CustomerActivity ca
 JOIN
-    Customers c ON hsc.CustomerID = c.CustomerID
+    Customers c ON ca.CustomerID = c.CustomerID
 WHERE
-    c.CustomerName LIKE %(customer_name_pattern)s
+    --ca.ActivityCount > %(min_activity_count)s
+    ca.ActivityCount > ?
 ORDER BY
-    hsc.TotalSales DESC;
+    ca.ActivityCount DESC;
 """
 
 # Define your parameters in a dictionary
-params = {
-    'start_date': '2022-01-01',
-    'end_date': '2022-12-31',
-    'high_spending_threshold': 10000,
-    'customer_name_pattern': '%John%'
-}
+params = [
+    '2023-01-01',
+    '2023-12-31',
+    1
+]
 
 # Connect to your SQLite database
 conn = sqlite3.connect('exercises.db')
